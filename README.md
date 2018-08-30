@@ -1,11 +1,16 @@
-favicon-gen is a simple favicon generator.
+favicon-gen is a simple favicon generator written in Go.
 
 ### Feature
 favicon-gen creates simple shape favicon.
 It aims for marking development web application.
 
 * png format
-* available shape are circle, rectangle
+* available shapes are circle, rectangle
+* default size is 32x32
+
+Examples are below:
+* [rect favicon](./example/rect.png)
+* [circle favicon](./example/circle.png)
 
 ### Usage
 	$ favicon-gen > favicon.ico
@@ -20,3 +25,6 @@ It aims for marking development web application.
 	  -t	use transparent background
 	  -whiteBG
 			white background
+
+### TODO
+many.
