@@ -46,7 +46,7 @@ func createFavicon() image.Image {
 		fillCircle(picture, randomColor())
 		return picture
 	}
-	fillRight(picture, randomColor())
+	drawRight(picture, randomColor())
 
 	return picture
 }
@@ -85,6 +85,16 @@ func fillCircle(bg draw.Image, c color.Color) {
 
 func fillshape(bg draw.Image, s *shape) {
 	draw.Draw(bg, bg.Bounds(), s, image.ZP, draw.Src)
+}
+
+func drawRight(bg draw.Image, c color.Color) {
+	for x := 0; x < bg.Bounds().Dx(); x++ {
+		for y := 0; y < bg.Bounds().Dy(); y++ {
+			if x > bg.Bounds().Dx()/2 {
+				bg.Set(x, y, c)
+			}
+		}
+	}
 }
 
 func randomColor() color.Color {
