@@ -21,70 +21,25 @@ var (
 	faviconLength = flag.Int("l", 32, "length for favicon")
 )
 
-var (
-	useCircle   = flag.Bool("circle", false, "paint circle for favicon")
-	whiteBG     = flag.Bool("whiteBG", false, "white background")
-	transparent = flag.Bool("t", false, "use transparent background")
-)
-
 // You should check out go blog.
 // https://blog.golang.org/go-imagedraw-package
 func main() {
 	flag.Parse()
 	rand.Seed(time.Now().UnixNano())
 
-	favicon := createFavicon()
+	rect := faviconRect()
+	favicon := image.NewRGBA(rect)
+	c := randomColor()
+	draw.Draw(favicon, favicon.Bounds(), &image.Uniform{c}, image.ZP, draw.Src)
+	drawRight(favicon, randomColor())
 	err := png.Encode(os.Stdout, favicon)
 	if err != nil {
 		log.Fatal("failed to write favicon: ", err)
 	}
 }
 
-func createFavicon() image.Image {
-	picture := background(bgColor())
-	if *useCircle {
-		fillCircle(picture, randomColor())
-		return picture
-	}
-	drawRight(picture, randomColor())
-
-	return picture
-}
-
-func bgColor() color.Color {
-	if *whiteBG {
-		return color.White
-	}
-	return randomColor()
-}
-
-func background(c color.Color) draw.Image {
-	rect := faviconRect()
-	m := image.NewRGBA(rect)
-	if !*transparent {
-		draw.Draw(m, m.Bounds(), &image.Uniform{c}, image.ZP, draw.Src)
-	}
-	return m
-}
-
 func faviconRect() image.Rectangle {
 	return image.Rect(faviconX0, faviconY0, *faviconLength, *faviconLength)
-}
-
-func fillRight(bg draw.Image, c color.Color) {
-	fillshape(bg, Right(bg, c))
-}
-
-func fillLower(bg draw.Image, c color.Color) {
-	fillshape(bg, Lower(bg, c))
-}
-
-func fillCircle(bg draw.Image, c color.Color) {
-	fillshape(bg, Circle(bg, c))
-}
-
-func fillshape(bg draw.Image, s *shape) {
-	draw.Draw(bg, bg.Bounds(), s, image.ZP, draw.Src)
 }
 
 func drawRight(bg draw.Image, c color.Color) {
